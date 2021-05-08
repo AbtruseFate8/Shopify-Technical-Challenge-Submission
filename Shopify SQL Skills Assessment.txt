@@ -1,0 +1,36 @@
+a) How many orders were shipped by Speedy Express in total?
+
+SELECT COUNT(OrderID) as "Total Orders Shipped by Speedy Express"
+FROM Orders
+WHERE ShipperID = 3
+
+Answer: In total, 68 Orders were shipped by Speedy Express. 
+
+b) What is the last name of the employee with the most orders?
+        
+SELECT e.LastName, COUNT(OrderID) as "Order Count"
+FROM Employees e
+	JOIN Orders o
+    	ON e.EmployeeID = o.EmployeeID
+GROUP BY e.EmployeeID
+ORDER BY COUNT(OrderID) DESC
+LIMIT 1
+        
+Answer: The last name of the employee with the most orders was “Peacock” with an order count of 40.
+
+c) What product was ordered the most by customers in Germany?
+
+SELECT p.ProductName, COUNT(od.OrderID) as “Order Count”, SUM(od.quantity) as “Units Sold”
+FROM Products p
+	JOIN OrderDetails od
+    	ON p.ProductID = od.ProductID
+    	JOIN Orders o
+    	ON o.OrderID = od.OrderID
+    	JOIN Customers c
+    	ON c.CustomerID = o.CustomerID
+WHERE c.Country = "Germany"
+GROUP BY od.ProductID
+ORDER BY SUM(od.quantity) DESC
+
+Answer: In terms of units sold, the most ordered item in Germany was the Boston Crab Meat (4 orders, 160 units). 
+In terms of order count, the most ordered item in Germany was the Gorgonzola Telino (5 orders, 125 units).
